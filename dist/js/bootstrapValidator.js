@@ -2,9 +2,9 @@
  * BootstrapValidator (http://bootstrapvalidator.com)
  * The best jQuery plugin to validate form fields. Designed to use with Bootstrap 3
  *
- * @version     v0.5.3, built on 2014-11-05 9:14:18 PM
+ * @version     v0.5.3, built on 2015-06-30 12:38:41 PM
  * @author      https://twitter.com/nghuuphuoc
- * @copyright   (c) 2013 - 2014 Nguyen Huu Phuoc
+ * @copyright   (c) 2013 - 2015 Nguyen Huu Phuoc
  * @license     Commercial: http://bootstrapvalidator.com/license/
  *              Non-commercial: http://creativecommons.org/licenses/by-nc-nd/3.0/
  */
@@ -87,6 +87,7 @@ if (typeof jQuery === 'undefined') {
                         invalid:    this.$form.attr('data-bv-feedbackicons-invalid'),
                         validating: this.$form.attr('data-bv-feedbackicons-validating')
                     },
+                    helpBlock:      this.$form.attr('data-bv-help-block'),
                     group:          this.$form.attr('data-bv-group'),
                     live:           this.$form.attr('data-bv-live'),
                     message:        this.$form.attr('data-bv-message'),
@@ -311,7 +312,7 @@ if (typeof jQuery === 'undefined') {
                 }
 
                 // Remove all error messages and feedback icons
-                $message.find('.help-block[data-bv-validator][data-bv-for="' + field + '"]').remove();
+                $message.find('.' + this.options.helpBlock + '[data-bv-validator][data-bv-for="' + field + '"]').remove();
                 $parent.find('i[data-bv-icon-for="' + field + '"]').remove();
 
                 // Whenever the user change the field value, mark it as not validated yet
@@ -327,7 +328,7 @@ if (typeof jQuery === 'undefined') {
                     if (!updateAll || i === total - 1) {
                         $('<small/>')
                             .css('display', 'none')
-                            .addClass('help-block')
+                            .addClass(this.options.helpBlock)
                             .attr('data-bv-validator', validatorName)
                             .attr('data-bv-for', field)
                             .attr('data-bv-result', this.STATUS_NOT_VALIDATED)
@@ -975,6 +976,7 @@ if (typeof jQuery === 'undefined') {
          * @returns {BootstrapValidator}
          */
         updateMessage: function(field, validator, message) {
+            var that = this;
             var $fields = $([]);
             switch (typeof field) {
                 case 'object':
@@ -989,7 +991,7 @@ if (typeof jQuery === 'undefined') {
             }
 
             $fields.each(function() {
-                $(this).data('bv.messages').find('.help-block[data-bv-validator="' + validator + '"][data-bv-for="' + field + '"]').html(message);
+                $(this).data('bv.messages').find('.' + that.options.helpBlock + '[data-bv-validator="' + validator + '"][data-bv-for="' + field + '"]').html(message);
             });
         },
         
@@ -1034,7 +1036,7 @@ if (typeof jQuery === 'undefined') {
 
                 var $parent      = $field.parents(group),
                     $message     = $field.data('bv.messages'),
-                    $allErrors   = $message.find('.help-block[data-bv-validator][data-bv-for="' + field + '"]'),
+                    $allErrors   = $message.find('.' + this.options.helpBlock + '[data-bv-validator][data-bv-for="' + field + '"]'),
                     $errors      = validatorName ? $allErrors.filter('[data-bv-validator="' + validatorName + '"]') : $allErrors,
                     $icon        = $field.data('bv.icon'),
                     container    = ('function' === typeof (this.options.fields[field].container || this.options.container)) ? (this.options.fields[field].container || this.options.container).call(this, $field, this) : (this.options.fields[field].container || this.options.container),
@@ -1250,7 +1252,7 @@ if (typeof jQuery === 'undefined') {
             for (var field in map) {
                 var $f = map[field];
                 if ($f.data('bv.messages')
-                      .find('.help-block[data-bv-validator][data-bv-for="' + field + '"]')
+                      .find('.' + that.options.helpBlock + '[data-bv-validator][data-bv-for="' + field + '"]')
                       .filter('[data-bv-result="' + this.STATUS_INVALID +'"]')
                       .length > 0)
                 {
@@ -1337,7 +1339,7 @@ if (typeof jQuery === 'undefined') {
                 messages = messages.concat(
                     $(this)
                         .data('bv.messages')
-                        .find('.help-block[data-bv-for="' + $(this).attr('data-bv-field') + '"][data-bv-result="' + that.STATUS_INVALID + '"]' + filter)
+                        .find('.' + that.options.helpBlock + '[data-bv-for="' + $(this).attr('data-bv-field') + '"][data-bv-result="' + that.STATUS_INVALID + '"]' + filter)
                         .map(function() {
                             var v = $(this).attr('data-bv-validator'),
                                 f = $(this).attr('data-bv-for');
@@ -1643,7 +1645,7 @@ if (typeof jQuery === 'undefined') {
                     $field
                         // Remove all error messages
                         .data('bv.messages')
-                            .find('.help-block[data-bv-validator][data-bv-for="' + field + '"]').remove().end()
+                            .find('.' + this.options.helpBlock + '[data-bv-validator][data-bv-for="' + field + '"]').remove().end()
                             .end()
                         .removeData('bv.messages')
                         // Remove feedback classes
@@ -1809,6 +1811,11 @@ if (typeof jQuery === 'undefined') {
         // By default, each field is placed inside the <div class="form-group"></div>
         // You should adjust this option if your form group consists of many fields which not all of them need to be validated
         group: '.form-group',
+
+        // The class for element consists the errors
+        // By default, all errors is placed inside the <div class="help-block"></div> inside group element
+        // You should adjust this option if you want to change class name
+        group: 'help-block',
 
         // Live validating option
         // Can be one of 3 values:
