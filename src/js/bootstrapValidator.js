@@ -89,9 +89,9 @@ if (typeof jQuery === 'undefined') {
                     },
                     helpBlock:      this.$form.attr('data-bv-help-block'),
                     statusClasses: {
-                      error: 'data-bv-status-classes-error',
-                      success: 'data-bv-status-classes-success',
-                      feedback: 'data-bv-status-classes-feedback'
+                      error: this.$form.attr('data-bv-status-classes-error'),
+                      success: this.$form.attr('data-bv-status-classes-success'),
+                      feedback: this.$form.attr('data-bv-status-classes-feedback')
                     },
                     group:          this.$form.attr('data-bv-group'),
                     live:           this.$form.attr('data-bv-live'),

@@ -2,7 +2,7 @@
  * BootstrapValidator (http://bootstrapvalidator.com)
  * The best jQuery plugin to validate form fields. Designed to use with Bootstrap 3
  *
- * @version     v0.5.3, built on 2015-06-30 12:53:16 PM
+ * @version     v0.5.3, built on 2015-06-30 1:17:26 PM
  * @author      https://twitter.com/nghuuphuoc
  * @copyright   (c) 2013 - 2015 Nguyen Huu Phuoc
  * @license     Commercial: http://bootstrapvalidator.com/license/
@@ -89,9 +89,9 @@ if (typeof jQuery === 'undefined') {
                     },
                     helpBlock:      this.$form.attr('data-bv-help-block'),
                     statusClasses: {
-                      error: 'data-bv-status-classes-error',
-                      success: 'data-bv-status-classes-success',
-                      feedback: 'data-bv-status-classes-feedback'
+                      error: this.$form.attr('data-bv-status-classes-error'),
+                      success: this.$form.attr('data-bv-status-classes-success'),
+                      feedback: this.$form.attr('data-bv-status-classes-feedback')
                     },
                     group:          this.$form.attr('data-bv-group'),
                     live:           this.$form.attr('data-bv-live'),
