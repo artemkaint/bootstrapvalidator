@@ -88,6 +88,11 @@ if (typeof jQuery === 'undefined') {
                         validating: this.$form.attr('data-bv-feedbackicons-validating')
                     },
                     helpBlock:      this.$form.attr('data-bv-help-block'),
+                    statusClasses: {
+                      error: 'data-bv-status-classes-error',
+                      success: 'data-bv-status-classes-success',
+                      feedback: 'data-bv-status-classes-feedback'
+                    },
                     group:          this.$form.attr('data-bv-group'),
                     live:           this.$form.attr('data-bv-live'),
                     message:        this.$form.attr('data-bv-message'),
@@ -308,7 +313,7 @@ if (typeof jQuery === 'undefined') {
                     $message  = (container && container !== 'tooltip' && container !== 'popover') ? $(container) : this._getMessageContainer($field, group);
 
                 if (container && container !== 'tooltip' && container !== 'popover') {
-                    $message.addClass('has-error');
+                    $message.addClass(this.options.statusClasses.error);
                 }
 
                 // Remove all error messages and feedback icons
@@ -351,7 +356,7 @@ if (typeof jQuery === 'undefined') {
                 {
                     // $parent.removeClass('has-success').removeClass('has-error').addClass('has-feedback');
                     // Keep error messages which are populated from back-end
-                    $parent.addClass('has-feedback');
+                    $parent.addClass(this.options.statusClasses.feedback);
                     var $icon = $('<i/>')
                                     .css('display', 'none')
                                     .addClass('form-control-feedback')
@@ -1065,7 +1070,7 @@ if (typeof jQuery === 'undefined') {
                     case this.STATUS_VALIDATING:
                         isValidField = null;
                         this.disableSubmitButtons(true);
-                        $parent.removeClass('has-success').removeClass('has-error');
+                        $parent.removeClass(this.options.statusClasses.success).removeClass(this.options.statusClasses.error);
                         if ($icon) {
                             $icon.removeClass(this.options.feedbackIcons.valid).removeClass(this.options.feedbackIcons.invalid).addClass(this.options.feedbackIcons.validating).show();
                         }
@@ -1077,7 +1082,7 @@ if (typeof jQuery === 'undefined') {
                     case this.STATUS_INVALID:
                         isValidField = false;
                         this.disableSubmitButtons(true);
-                        $parent.removeClass('has-success').addClass('has-error');
+                        $parent.removeClass(this.options.statusClasses.success).addClass(this.options.statusClasses.error);
                         if ($icon) {
                             $icon.removeClass(this.options.feedbackIcons.valid).removeClass(this.options.feedbackIcons.validating).addClass(this.options.feedbackIcons.invalid).show();
                         }
@@ -1101,7 +1106,7 @@ if (typeof jQuery === 'undefined') {
                             }
                         }
 
-                        $parent.removeClass('has-error has-success').addClass(this.isValidContainer($parent) ? 'has-success' : 'has-error');
+                        $parent.removeClass([this.options.statusClasses.error, this.options.statusClasses.success].join(' ')).addClass(this.isValidContainer($parent) ? this.options.statusClasses.success : this.options.statusClasses.error);
                         if ($tab) {
                             $tab.removeClass('bv-tab-success').removeClass('bv-tab-error').addClass(this.isValidContainer($tabPane) ? 'bv-tab-success' : 'bv-tab-error');
                         }
@@ -1112,7 +1117,7 @@ if (typeof jQuery === 'undefined') {
                     default:
                         isValidField = null;
                         this.disableSubmitButtons(false);
-                        $parent.removeClass('has-success').removeClass('has-error');
+                        $parent.removeClass(this.options.statusClasses.success).removeClass(this.options.statusClasses.error);
                         if ($icon) {
                             $icon.removeClass(this.options.feedbackIcons.valid).removeClass(this.options.feedbackIcons.invalid).removeClass(this.options.feedbackIcons.validating).hide();
                         }
@@ -1650,7 +1655,7 @@ if (typeof jQuery === 'undefined') {
                         .removeData('bv.messages')
                         // Remove feedback classes
                         .parents(group)
-                            .removeClass('has-feedback has-error has-success')
+                            .removeClass([this.options.statusClasses.error, this.options.statusClasses.success, this.options.statusClasses.feedback].join(' '))
                             .end()
                         // Turn off events
                         .off('.bv')
@@ -1815,7 +1820,22 @@ if (typeof jQuery === 'undefined') {
         // The class for element consists the errors
         // By default, all errors is placed inside the <div class="help-block"></div> inside group element
         // You should adjust this option if you want to change class name
-        group: 'help-block',
+        helpBlock: 'help-block',
+
+        // Add erro/success/feedback classes based on the field validity.
+        //
+        // Examples:
+        // - Use Bootstrap classes:
+        //  statusClasses: {
+        //      error: 'has-error',
+        //      success: 'has-success',
+        //      feedback: 'has-feedback'
+        //  }
+        statusClasses: {
+          error: 'has-error',
+          success: 'has-success',
+          feedback: 'has-feedback'
+        },
 
         // Live validating option
         // Can be one of 3 values:
